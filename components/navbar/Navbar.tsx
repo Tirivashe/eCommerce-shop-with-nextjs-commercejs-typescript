@@ -2,12 +2,10 @@ import React from 'react'
 import { AppBar, Toolbar, IconButton, Badge, MenuItem, Typography } from '@material-ui/core'
 import { ShoppingCart } from '@material-ui/icons'
 import useStyles from './styles'
+import { useStoreContext } from '../../utils/context'
 
-type NavbarProps = {
-  totalItems: any
-}
-
-const Navbar: React.FC<NavbarProps> = ({totalItems}) => {
+const Navbar: React.FC = () => {
+  const { cart } = useStoreContext()
   const classes = useStyles()
   return (
     <>
@@ -20,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({totalItems}) => {
           <div className={classes.grow}/>
           <div>
             <IconButton aria-label="Show cart items" color="inherit">
-              <Badge badgeContent={totalItems} color="secondary">
+              <Badge badgeContent={cart.total_items} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>

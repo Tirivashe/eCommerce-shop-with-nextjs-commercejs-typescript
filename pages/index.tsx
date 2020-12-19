@@ -1,21 +1,12 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Products, Navbar } from '../components'
 import { commerce } from '../lib/commerce'
+import { useStoreContext } from '../utils/context'
 
 export default function Home({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
-
-  const [cart, setCart] = useState<any>({})
-
-  const fetchCart = async () => {
-    setCart(await commerce.cart.retrieve())
-  }
-
-  const addToCart= async (productId: string, quantity: number) => {
-    const item = await commerce.cart.add(productId, quantity)
-    setCart(item.cart)
-  }
+  const { fetchCart, cart, addToCart } = useStoreContext()
 
   useEffect(() => {
     fetchCart()
@@ -29,8 +20,8 @@ export default function Home({ products }: InferGetStaticPropsType<typeof getSta
         <title>Welcome To The Shop | Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar totalItems={cart.total_items}/>
-      <Products products={products} addToCart={addToCart}/>
+      <Navbar />
+      <Products products={products}/>
     </div>
   )
 }

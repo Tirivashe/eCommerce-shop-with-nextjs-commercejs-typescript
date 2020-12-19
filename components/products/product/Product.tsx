@@ -2,13 +2,14 @@ import React from 'react'
 import { Card, CardMedia, CardActions, CardContent, Typography, IconButton } from '@material-ui/core'
 import { AddShoppingCart } from '@material-ui/icons'
 import { useStyles } from './styles'
+import { useStoreContext } from '../../../utils/context'
 
 interface ProductProps {
-  product: any,
-  addToCart(a: string, b: number): void
+  product: any
 }
 
-const Product: React.FC<ProductProps> = ({ product, addToCart }) => {
+const Product: React.FC<ProductProps> = ({ product }) => {
+  const { addToCart } = useStoreContext()
   const classes = useStyles()
   return (
     <Card className={classes.root}> 

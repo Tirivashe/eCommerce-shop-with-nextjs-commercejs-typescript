@@ -5,10 +5,9 @@ import useStyles from './styles'
 
 type ProductsProps = {
   products: any,
-  addToCart(a: string, b: number): void
 }
 
-const Products: React.FC<ProductsProps> = ({ products, addToCart }) => {
+const Products: React.FC<ProductsProps> = ({ products }) => {
   const classes= useStyles()
 
   return (
@@ -17,7 +16,7 @@ const Products: React.FC<ProductsProps> = ({ products, addToCart }) => {
       <Grid container justify="center" spacing={4}>
         {products.map(product => (
           <Grid key={product.id} item xs={12} sm={6} md={4} lg={3}>
-            <Product product={product} addToCart={addToCart} />
+            <Product product={product} />
           </Grid>
         ))}
       </Grid>
