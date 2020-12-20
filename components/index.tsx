@@ -1,2 +1,5 @@
 export { default as Navbar} from './navbar/Navbar'
 export { default as Products} from './products/Products'
+export { default as AddressForm} from './checkout/addressForm/AddressForm'
+export { default as PaymentForm} from './checkout/paymentForm/PaymentForm'
+export { default as Confirmation} from './checkout/confirmation/Confirmation'
