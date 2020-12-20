@@ -1,18 +1,19 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Head from 'next/head'
 import { useEffect } from 'react'
-import { Products, Navbar } from '../components'
+import { Products } from '../components'
 import { commerce } from '../lib/commerce'
 import { useStoreContext } from '../utils/context'
 
 export default function Home({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { fetchCart, cart, addToCart } = useStoreContext()
+  const { fetchCart, cart } = useStoreContext()
 
   useEffect(() => {
     fetchCart()
+    console.log("useEffect ran")
   }, [])
 
-  console.log(cart)
+  console.log("Home: ", cart)
 
   return (
     <div>
@@ -20,7 +21,6 @@ export default function Home({ products }: InferGetStaticPropsType<typeof getSta
         <title>Welcome To The Shop | Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar />
       <Products products={products}/>
     </div>
   )
