@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import FormInput from '../CustomTextField'
 import { commerce } from '../../../lib/commerce'
 import Link from 'next/link'
+import CustomSelect from '../CustomSelect'
 
 type AddressFormProps = {
   checkoutToken: any,
@@ -66,6 +67,7 @@ const AddressForm = ({ checkoutToken, next }: AddressFormProps) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(data => next({...data, shippingCountry, shippingSubdivision, shippingOption}))}>
           <Grid container spacing={3}>
+            
             <FormInput name="firstName" label="First Name" required/>
             <FormInput name="lastName" label="Last Name" required/>
             <FormInput name="address" label="Address" required/>
@@ -73,39 +75,11 @@ const AddressForm = ({ checkoutToken, next }: AddressFormProps) => {
             <FormInput name="city" label="City" required/>
             <FormInput name="zip" label="ZIP/ Postal Code" required/>
 
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Country</InputLabel>
-              <Select value={shippingCountry} fullWidth onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setShippingCountry(e.target.value)}>
-                {countries.map(country => (
-                  <MenuItem key={country.id} value={country.id}>
-                    {country.label}
-                </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Subdivisions</InputLabel>
-              <Select value={shippingSubdivision} fullWidth onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setShippingSubdivision(e.target.value)}>
-                {subdivisions.map(subdivison => (
-                  <MenuItem key={subdivison.id} value={subdivison.id}>
-                    {subdivison.label}
-                </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <InputLabel>Shipping Options</InputLabel>
-              <Select value={shippingOption} fullWidth onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setShippingOption(e.target.value)}>
-                {options.map(option => (
-                  <MenuItem key={option.id} value={option.id}>
-                    {option.label}
-                </MenuItem>
-                ))}
-              </Select>
-            </Grid>
+            <CustomSelect inputLabel="Shipping Country" stateValue={shippingCountry} options={countries} setState={setShippingCountry}/>
+            <CustomSelect inputLabel="Shipping Subdivisions" stateValue={shippingSubdivision} options={subdivisions} setState={setShippingSubdivision}/>
+            <CustomSelect inputLabel="Shipping Options" stateValue={shippingOption} options={options} setState={setShippingOption}/>
           </Grid>
+
           <br />
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Link href='/cart'>
