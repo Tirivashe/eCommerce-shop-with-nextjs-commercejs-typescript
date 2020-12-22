@@ -9,7 +9,7 @@ const Cart: FC = () => {
   const { cart } = useStoreContext()
   const classes = useStyles()
 
-  return cart ? (
+  return cart.line_items !== undefined ? (
     
     <Container className={classes.container}>
       <div className={classes.toolbar}>
