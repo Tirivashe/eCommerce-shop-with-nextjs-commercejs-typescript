@@ -10,10 +10,7 @@ export default function Home({ products }: InferGetStaticPropsType<typeof getSta
 
   useEffect(() => {
     fetchCart()
-    console.log("useEffect ran")
   }, [])
-
-  console.log("Home: ", cart)
 
   return (
     <div>

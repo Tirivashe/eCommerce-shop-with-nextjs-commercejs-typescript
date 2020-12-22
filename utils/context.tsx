@@ -1,13 +1,23 @@
 import React, { createContext, useState, useContext } from 'react';
 import { commerce } from '../lib/commerce';
+import { useRouter } from 'next/router'
 
 type Value =  {
   cart: any,
+  order: any,
+  checkoutToken: any,
+  activeStep: number,
+  shippingData: any,
   addToCart(a: string, b: number): void,
   fetchCart(): void,
   handleUpdateCartQty(a: string, b: number): void,
   handleRemoveFromCart(a: string): void,
-  handleEmptyCart(): void
+  handleEmptyCart(): void,
+  handleCaptureCheckout(a: any, b: any): void
+  generateToken(): void,
+  next(a: any): void,
+  nextStep(): void
+  backStep(): void
 }
 
 const StoreContext = createContext<Value>(null);
@@ -17,8 +27,13 @@ export const useStoreContext = () => {
 }
 
 const StoreContextProvider = ({ children }) => {
+  const router = useRouter()
 
   const [cart, setCart] = useState<any>({})
+  const [order, setOrder] = useState({})
+  const [activeStep, setActiveStep] = useState(0)
+  const [checkoutToken, setCheckoutToken] = useState(null)
+  const [shippingData, setShippingData] = useState({})
 
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve())
@@ -43,9 +58,69 @@ const StoreContextProvider = ({ children }) => {
     const { cart } = commerce.cart.empty()
     setCart(cart)
   }
+
+  const handleCaptureCheckout = async ( checkoutTokenId: any, newOrder: any ) => {
+    try {
+      const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
+      setOrder(incomingOrder)
+      refreshCart()
+    } catch (error) {
+      console.log("Cannot capture order: ", error.data.error.message)
+    }
+  }
+
+  const refreshCart = async () => {
+    try {
+      const newCart = await commerce.cart.refresh()
+      setCart(newCart)
+    } catch (error) {
+      console.error("Cannot refresh cart: ", error)
+    }
+  }
+
+  const generateToken = async () => {
+    try {
+      const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
+      setCheckoutToken(token)
+    } catch (error) {
+      router.push('/')
+      console.error("Cannot generate token: ", error)
+    }
+  }
+
+  const nextStep = () => {
+    setActiveStep(prevState => prevState + 1)
+  }
+
+  const backStep = () => {
+    setActiveStep(prevState => prevState - 1)
+  }
+
+  const next = data => {
+    setShippingData(data)
+    nextStep()
+  }
+
+  const value= { 
+    cart,
+    order,
+    activeStep,
+    checkoutToken,
+    shippingData, 
+    addToCart, 
+    fetchCart, 
+    handleUpdateCartQty, 
+    handleRemoveFromCart, 
+    handleEmptyCart,
+    handleCaptureCheckout,
+    generateToken,
+    next,
+    nextStep,
+    backStep
+  }
   
   return (
-    <StoreContext.Provider value={{ cart, addToCart, fetchCart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart }}>
+    <StoreContext.Provider value={value}>
       {children}
     </StoreContext.Provider>
   )

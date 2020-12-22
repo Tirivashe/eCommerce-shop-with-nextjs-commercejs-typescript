@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography } from '@material-ui/core'
 import { useForm, FormProvider } from 'react-hook-form'
 import FormInput from '../CustomTextField'
 import { commerce } from '../../../lib/commerce'
 import Link from 'next/link'
 import CustomSelect from '../CustomSelect'
+import { useStoreContext } from '../../../utils/context'
 
-type AddressFormProps = {
-  checkoutToken: any,
-  next(a : any): void
-}
-
-const AddressForm = ({ checkoutToken, next }: AddressFormProps) => {
+const AddressForm = () => {
+  const { checkoutToken, next } = useStoreContext()
   const [shippingCountries, setShippingCountries] = useState([])
   const [shippingCountry, setShippingCountry] = useState('')
   const [shippingSubdivisions, setShippingSubdivisions] = useState([])
@@ -22,31 +19,24 @@ const AddressForm = ({ checkoutToken, next }: AddressFormProps) => {
 
   const fetchShippingCountries = async (tokenID: string) => {
     const { countries } = await commerce.services.localeListShippingCountries(tokenID)
-    console.log(countries)
     setShippingCountries(countries)
     setShippingCountry(Object.keys(countries)[0])
   }
 
   const fetchSubdivisions = async (countryCode: string) => {
     const { subdivisions } = await commerce.services.localeListSubdivisions(countryCode)
-    console.log(subdivisions)
     setShippingSubdivisions(subdivisions)
     setShippingSubdivision(Object.keys(subdivisions)[0])
   }
 
   const fetchShippingOptions = async (tokenID: string, country: string, region: string = null) => {
     const options = await commerce.checkout.getShippingOptions(tokenID, { country, region })
-    console.log(subdivisions)
     setShippingOptions(options)
     setShippingOption(options[0].id)
   }
 
   const countries = Object.entries(shippingCountries).map(([ code, name ]) => ({ id: code , label: name }))
-  console.log(countries)
-
   const subdivisions = Object.entries(shippingSubdivisions).map(([ code, name ]) => ({ id: code , label: name }))
-  console.log(subdivisions)
-
   const options = shippingOptions.map(option => ({ id: option.id, label: `${option.description} - (${option.price.formatted_with_symbol})` }))
 
   useEffect(() => {
