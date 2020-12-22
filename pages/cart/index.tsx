@@ -9,15 +9,21 @@ const Cart: FC = () => {
   const { cart } = useStoreContext()
   const classes = useStyles()
 
-  return (
+  return cart !== undefined ? (
     
     <Container className={classes.container}>
       <div className={classes.toolbar}>
         <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
-        {cart === undefined || cart.line_items.length === 0  ? <EmptyCart /> : <FilledCart />}
+        {cart.line_items.length === 0  ? <EmptyCart /> : <FilledCart />}
       </div>
     </Container>
-  )
+  ) : (<Container className={classes.container}>
+        <div className={classes.toolbar}>
+          <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
+          <EmptyCart />
+        </div>
+      </Container>
+    )
 }
 
 export default Cart
