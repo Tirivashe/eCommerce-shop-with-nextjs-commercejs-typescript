@@ -16,7 +16,6 @@ export default function Home({ products }: InferGetStaticPropsType<typeof getSta
     <div>
       <Head>
         <title>Welcome To The Shop | Home</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Products products={products}/>
     </div>

@@ -4,7 +4,7 @@ import React from 'react'
 import { useStoreContext } from '../../../utils/context'
 
 let Confirmation: React.FC = () => {
-  const { order } = useStoreContext()
+  const { order, reset} = useStoreContext()
   return order.customer ? (
     <>
       <div>
@@ -14,7 +14,7 @@ let Confirmation: React.FC = () => {
       </div>
       <br />
       <Link href='/'>
-        <Button variant="outlined" type="button">Back To Home</Button>
+        <Button variant="outlined" type="button" onClick={reset}>Back To Home</Button>
       </Link>
     </>
   ) : (

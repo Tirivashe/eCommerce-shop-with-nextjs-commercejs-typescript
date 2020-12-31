@@ -5,6 +5,7 @@ import useStyles from './styles'
 import { useStoreContext } from '../../utils/context'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 const Navbar: React.FC = () => {
   const { cart } = useStoreContext()
@@ -17,8 +18,8 @@ const Navbar: React.FC = () => {
         <Toolbar>
           <Link href="/">
             <Typography variant="h6" className={classes.title} color="inherit">
-              <img src="/shopLogo.jpg" alt="commerce" height="50px" className={classes.image}/>
-              Shop Here!
+              <Image src="/shop.png" alt="commerce" width="30px" height="30px" className={classes.image}/>
+                The Store
             </Typography>
           </Link>
           <div className={classes.grow}/>

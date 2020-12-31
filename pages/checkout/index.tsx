@@ -3,6 +3,7 @@ import { Paper, Stepper, Step, StepLabel,  Typography } from '@material-ui/core'
 import useStyles from '../../pageStyles/styles.checkout'
 import { AddressForm, PaymentForm, Confirmation } from '../../components'
 import { useStoreContext } from '../../utils/context'
+import Head from 'next/head'
 
 const steps = ['Shipping Address', 'Payment Details']
 
@@ -11,13 +12,18 @@ const CheckoutForm = () => {
   const { cart, activeStep, checkoutToken, generateToken } = useStoreContext()
 
   useEffect(() => {
-    generateToken()
+    if(cart.id){
+      generateToken(cart.id, steps)
+    }
   },[cart])
 
   const Form = () => activeStep === 0 ? <AddressForm /> : <PaymentForm />
 
   return (
     <>
+      <Head>
+        <title>Welcome To The Shop | Checkout</title>
+      </Head>
       <div className={classes.toolbar}/>
       <main className={classes.layout}>
         <Paper className={classes.paper}>

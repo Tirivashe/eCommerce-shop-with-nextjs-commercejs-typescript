@@ -1,4 +1,5 @@
 import { Container, Typography } from '@material-ui/core'
+import Head from 'next/head'
 import React, { FC } from 'react'
 import EmptyCart from '../../components/Cart/emptyCart/EmptyCart'
 import FilledCart from '../../components/Cart/FilledCart/FilledCart'
@@ -11,29 +12,44 @@ const Cart: FC = () => {
 
   if(!cart ||!cart.line_items){
     return (
-    <Container className={classes.container}>
-      <div className={classes.toolbar}>
-        <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
-        <EmptyCart />
-      </div>
-    </Container>
+      <>
+        <Head>
+          <title>Welcome To The Shop | Cart</title>
+        </Head>
+        <Container className={classes.container}>
+          <div className={classes.toolbar}>
+            <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
+            <EmptyCart />
+          </div>
+        </Container>
+    </>
     )
   }
 
   return cart.line_items !== undefined ? (
-    
+    <>
+    <Head>
+      <title>Welcome To The Shop | Cart</title>
+    </Head>
     <Container className={classes.container}>
       <div className={classes.toolbar}>
         <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
         {!cart.line_items.length  ? <EmptyCart /> : <FilledCart />}
       </div>
     </Container>
-  ) : (<Container className={classes.container}>
+    </>
+  ) : (
+    <>
+      <Head>
+        <title>Welcome To The Shop | Cart</title>
+      </Head>
+      <Container className={classes.container}>
         <div className={classes.toolbar}>
           <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
           <EmptyCart />
         </div>
       </Container>
+    </>
     )
 }
 

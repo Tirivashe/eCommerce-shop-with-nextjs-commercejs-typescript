@@ -14,10 +14,11 @@ type Value =  {
   handleRemoveFromCart(a: string): void,
   handleEmptyCart(): void,
   handleCaptureCheckout(a: any, b: any): void
-  generateToken(): void,
+  generateToken(a: string, b: string[]): void,
   next(a: any): void,
   nextStep(): void
-  backStep(): void
+  backStep(): void,
+  reset(): void
 }
 
 const StoreContext = createContext<Value>(null);
@@ -63,6 +64,7 @@ const StoreContextProvider = ({ children }) => {
     try {
       const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder)
       setOrder(incomingOrder)
+      console.log("Current order: ", order)
       refreshCart()
     } catch (error) {
       console.log("Cannot capture order: ", error.data.error.message)
@@ -76,14 +78,21 @@ const StoreContextProvider = ({ children }) => {
     } catch (error) {
       console.error("Cannot refresh cart: ", error)
     }
-  }
 
-  const generateToken = async () => {
+  }
+  
+  const reset = () => { 
+    setActiveStep(0)
+    setOrder({})
+  }
+  const generateToken = async (cart_id: string, steps: string[]) => {
     try {
-      const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' })
+      const token = await commerce.checkout.generateToken(cart_id, { type: 'cart' })
       setCheckoutToken(token)
     } catch (error) {
-      router.push('/')
+      if(activeStep !== steps.length){
+        router.push('/')
+      }
       console.error("Cannot generate token: ", error)
     }
   }
@@ -116,7 +125,8 @@ const StoreContextProvider = ({ children }) => {
     generateToken,
     next,
     nextStep,
-    backStep
+    backStep,
+    reset
   }
   
   return (
